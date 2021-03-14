@@ -1,5 +1,27 @@
 # IDAO-21 Baseline
 
+## Problem description
+
+![plot](./images/statement-image.png)
+
+The presence of Dark Matter (DM) in the Universe is nowadays an established, yet still mysterious, paradigm: deciphering its essence is one of the most compelling tasks for fundamental physics today. The nature of DM represents one of the key issues to understanding our Universe. Diﬀerent models predict the existence of neutral particles with a mass of few GeV or higher that would ﬁll our Galaxy. They could interact with the nuclei present in ordinary matter producing highly ionizing nuclear recoils (NR) with a kinetic energy as small as few keV. These NR would travel for hundreds to thousands of microns in gas leaving a trail of ionized atoms and free electrons.
+
+Several experiments have been studied to detect those trails and possibly to reconstruct their main properties as position, direction, total amount of produced ionization. CYGNO collaboration is developing a technology able to collect those electrons on a structure where they produce photons, so that to have the possibility of creating images representing the 2D projection of the 3D NR trajectories.
+
+![plot](./images/statement-image2.png)
+
+Low energy photons produced by natural radioactivity can ionize electrons from atoms and molecules in the detector, producing recoils that would represent an important and dangerous background to Dark Matter signals. Electron recoils (ER) will produce distinctive and diverse patterns of ionization charge and therefore diﬀerent images, given the diﬀerent way they deposit energy and interact with matter.
+
+Thus, NR and ER can be eﬃciently identiﬁed and separated down to low kinetic energies by studying the properties of the particle tracks.
+
+In all cases, while traveling in gas, ionised electrons will be subject to diﬀusion eﬀects that blur ﬁnal images. Moreover, optical sensors used to collect the photons have a small, yet not negligible, electronic noise that adds up to physical signals.
+
+In this competition we propose you images taken from 12 classes (6 classes of ER and 6 of NR) obtained by simulating detector response to ER and NR events with diﬀerent energies.
+
+The test asks to properly assign each image to the correct particle type (ER/NR) and reconstruct the particle angle.
+
+![plot](./images/statement-image3.png)
+![plot](./images/statement-image4.png)
 ## Dataset
 Dataset is available for download through Yandex disk -> [Click here](https://yadi.sk/d/UJ8DEma9LHRMsg).
 
@@ -66,6 +88,13 @@ This will generate `./resultsreport.log` in the current directory containg infor
 
 ### Score
 Score = MAE - AUC
+
+MAE is the mean absolute error (L1) of the predicted energy.
+
+AUC is the ROC AUC of the classiﬁcation problem.
+
+Please upload your predictions into the system in the .csv format. The ﬁle should consist of 16564 rows and contain three columns:
+id, classiﬁcation_predictions, regression_predictions
 ---
 ### Classification
 ![](results/roc_auc.png)
