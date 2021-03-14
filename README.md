@@ -68,8 +68,13 @@ The dataset are interleaved in the following scheme:
 * is training; - is testing
 
 
-
 ### Dataset distribution
+
+The training sample contains **2200** examples of each training class and 2 examples each test class. The energies and particle types for the training dataset are known.
+
+The public test sample contains **250** examples of each of the training classes.
+
+The private test sample contains the **2500** examples from each testing class.
 
 ## Training
 If you want to retrain the model just run:
@@ -95,6 +100,8 @@ AUC is the ROC AUC of the classiﬁcation problem.
 
 Please upload your predictions into the system in the .csv format. The ﬁle should consist of 16564 rows and contain three columns:
 id, classiﬁcation_predictions, regression_predictions
+
+
 ---
 ### Classification
 ![](results/roc_auc.png)
