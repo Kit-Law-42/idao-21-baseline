@@ -4,13 +4,13 @@
 
 ![plot](./images/statement-image.png)
 
-The presence of Dark Matter (DM) in the Universe is nowadays an established, yet still mysterious, paradigm: deciphering its essence is one of the most compelling tasks for fundamental physics today. The nature of DM represents one of the key issues to understanding our Universe. Diﬀerent models predict the existence of neutral particles with a mass of few GeV or higher that would ﬁll our Galaxy. They could interact with the nuclei present in ordinary matter producing highly ionizing nuclear recoils (NR) with a kinetic energy as small as few keV. These NR would travel for hundreds to thousands of microns in gas leaving a trail of ionized atoms and free electrons.
+The presence of Dark Matter (DM) in the Universe is nowadays an established, yet still mysterious, paradigm: deciphering its essence is one of the most compelling tasks for fundamental physics today. The nature of DM represents one of the key issues to understanding our Universe. Diﬀerent models predict the existence of neutral particles with a mass of few GeV or higher that would ﬁll our Galaxy. They could interact with the nuclei present in ordinary matter producing highly ionizing **nuclear recoils (NR)** with a kinetic energy as small as few keV. These NR would travel for hundreds to thousands of microns in gas leaving a trail of ionized atoms and free electrons.
 
 Several experiments have been studied to detect those trails and possibly to reconstruct their main properties as position, direction, total amount of produced ionization. CYGNO collaboration is developing a technology able to collect those electrons on a structure where they produce photons, so that to have the possibility of creating images representing the 2D projection of the 3D NR trajectories.
 
 ![plot](./images/statement-image2.png)
 
-Low energy photons produced by natural radioactivity can ionize electrons from atoms and molecules in the detector, producing recoils that would represent an important and dangerous background to Dark Matter signals. Electron recoils (ER) will produce distinctive and diverse patterns of ionization charge and therefore diﬀerent images, given the diﬀerent way they deposit energy and interact with matter.
+Low energy photons produced by natural radioactivity can ionize electrons from atoms and molecules in the detector, producing recoils that would represent an important and dangerous background to Dark Matter signals. **Electron recoils (ER)** will produce distinctive and diverse patterns of ionization charge and therefore diﬀerent images, given the diﬀerent way they deposit energy and interact with matter.
 
 Thus, NR and ER can be eﬃciently identiﬁed and separated down to low kinetic energies by studying the properties of the particle tracks.
 
