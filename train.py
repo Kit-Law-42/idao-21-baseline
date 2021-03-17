@@ -10,7 +10,8 @@ from idao.model import SimpleConv
 seed_everything(666)
 
 
-def trainer(mode: ["classification", "regression"], cfg):
+# def trainer(mode: ["classification", "regression"], cfg):
+def trainer(mode, cfg):
     # init model
     model = SimpleConv(mode=mode)
     if mode == "classification":
@@ -18,6 +19,7 @@ def trainer(mode: ["classification", "regression"], cfg):
     else:
         epochs = cfg["TRAINING"]["RegressionEpochs"]
     # Initialize a trainer
+    # Require at least 1 GPU for training.
     trainer = pl.Trainer(
         gpus=int(cfg["TRAINING"]["NumGPUs"]),
         max_epochs=int(epochs),

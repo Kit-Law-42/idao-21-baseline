@@ -51,8 +51,9 @@ class IDAODataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
         # called on every GPU
+        # ValueError: Sum of input lengths does not equal the length of the input dataset!
         self.train, self.val = random_split(
-            self.dataset, [10000, 3404], generator=torch.Generator().manual_seed(666)
+            self.dataset, [10000, 3280], generator=torch.Generator().manual_seed(666)
         )
         
 
