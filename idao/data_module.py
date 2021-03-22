@@ -21,12 +21,12 @@ class IDAODataModule(pl.LightningDataModule):
             root=self.data_dir.joinpath("train"),
             loader=img_loader,
             transform=transforms.Compose(
-                [transforms.ToTensor(), transforms.CenterCrop(120)]
+                [transforms.ToTensor(), transforms.CenterCrop(120)] # crop image to 120*120
             ),
             target_transform=transforms.Compose(
                 [
                     lambda num: (
-                        torch.tensor([0, 1]) if num == 0 else torch.tensor([1, 0])
+                        torch.tensor([0, 1]) if num == 0 else torch.tensor([1, 0]) # one hot encoding.
                     )
                 ]
             ),

@@ -172,8 +172,9 @@ def main(cfg):
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
-    config.read("./config.ini")
-
+    #config.read("./config.ini")
+    config.read("drive/MyDrive/Colab Notebooks/Olympiad2021/config.ini")
+    
     logging.basicConfig(
         level=logging.INFO,
         handlers=[

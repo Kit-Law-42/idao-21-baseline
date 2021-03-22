@@ -23,6 +23,7 @@ from idao.utils import delong_roc_variance
 dict_pred = defaultdict(list)
 
 def make_csv(mode, dataloader, checkpoint_path, cfg):
+    logging.info("Start make csv")
     torch.multiprocessing.set_sharing_strategy("file_system")
     logging.info("Loading checkpoint")
     model = SimpleConv.load_from_checkpoint(checkpoint_path, mode=mode)
@@ -64,10 +65,18 @@ def main(cfg):
         make_csv(mode, dl, model_path, cfg=cfg)
 
     data_frame = pd.DataFrame(dict_pred, columns=["id", "classification_predictions", "regression_predictions"])
-    data_frame.to_csv('submission.csv', index=False, header=True)
+    data_frame.to_csv('drive/MyDrive/Colab Notebooks/Olympiad2021/submission.csv', index=False, header=True)
 
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
-    config.read("./config.ini")
-    main(cfg=config)
+    
+    config.read("drive/MyDrive/Colab Notebooks/Olympiad2021/config.ini")
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler(f'{config["REPORT"]["SaveDir"]}submission.log'),
+            logging.StreamHandler(sys.stdout),
+        ],
+    )
+    #main(cfg=config)

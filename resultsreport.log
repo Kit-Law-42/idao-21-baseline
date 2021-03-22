@@ -1,0 +1,22 @@
+INFO:root:Loading checkpoint
+INFO:root:Regression model loaded
+INFO:root:Starting regression task
+INFO:root:Test energy variance: 15.739116668701172
+INFO:root:Energy correlation plot saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_correlation.png
+INFO:root:===> Length: 10000 10000
+INFO:root:Energy comparison plot saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_comparison.png
+INFO:root:tensor([ 6., 20., 10.,  ...,  1., 20.,  1.])
+INFO:root:Histogram 1.0 keV saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_hist1.0_0.png
+INFO:root:Histogram 3.0 keV saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_hist3.0_1.png
+INFO:root:Histogram 6.0 keV saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_hist6.0_2.png
+INFO:root:Histogram 10.0 keV saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_hist10.0_3.png
+INFO:root:Histogram 20.0 keV saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_hist20.0_4.png
+INFO:root:Histogram 30.0 keV saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/energy_hist30.0_5.png
+INFO:root:Loading checkpoint
+INFO:root:Classification model loaded
+INFO:root:Starting classification task
+INFO:root:ROC plot saved at: drive/MyDrive/Colab Notebooks/Olympiad2021/results/roc_auc.png
+INFO:root:Delong => ROC-AUC: 0.9704509189078402 variance: 1.8326013140249493e-06
+INFO:root:MAE = 7.441068649291992
+INFO:root:AUC = 0.9704509189078402
+INFO:root:Score = AUC - MAE: -6.470617771148682

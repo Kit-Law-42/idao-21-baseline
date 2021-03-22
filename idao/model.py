@@ -20,8 +20,9 @@ class Clamp(nn.Module):
         return x
 
 
-class SimpleConv(pl.LightningModule):
-    def __init__(self, mode: ["classification", "regression"] = "classification"):
+class SimpleConv(pl.LightningModule): # pl.LightningModule replaces nn.Module in pyTorch
+    #def __init__(self, mode: ["classification", "regression"] = "classification"):
+    def __init__(self, mode = "classification"):
         super().__init__()
         self.mode = mode
         self.layer1 = nn.Sequential(

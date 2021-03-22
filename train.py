@@ -31,12 +31,16 @@ def trainer(mode, cfg):
     )
 
     # Train the model ⚡
+    # AttributeError: Can't pickle local object 'IDAODataModule.prepare_data.<locals>.<lambda>'
+    # Cannot run on windows
+    # https://discuss.pytorch.org/t/cant-pickle-local-object-dataloader-init-locals-lambda/31857/13
     trainer.fit(model, dataset_dm)
 
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
-    config.read("./config.ini")
+    #config.read("./config.ini")
+    config.read("drive/MyDrive/Colab Notebooks/Olympiad2021/config.ini")
 
     PATH = path.Path(config["DATA"]["DatasetPath"])
 
