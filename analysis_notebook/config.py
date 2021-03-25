@@ -7,7 +7,7 @@ class Config:
     WORKING_DIR = os.path.join(PROJECT_DIR, "analysis_notebook")
 
     # directory where all data will be put.
-    DATASET_DIR = "C:\\Users\\alexl\\Downloads\\idao_dataset"
+    DATASET_DIR = "C:\\Users\\alexl\\Google Drive\\Colab Notebooks\\Olympiad2021\\idao_dataset"
 
 
     # data paths

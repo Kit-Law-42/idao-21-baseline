@@ -3,4 +3,4 @@ analysis_notebook/.vscode/settings.json
 analysis_notebook/__pycache__/config.cpython-38.pyc
 *.pyc
 config.ini
-config.ini
+checkpoints
