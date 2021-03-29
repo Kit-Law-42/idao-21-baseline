@@ -5,7 +5,7 @@ import pytorch_lightning as pl
 from pytorch_lightning import seed_everything
 
 from idao.data_module import IDAODataModule
-from idao.model import SimpleConv
+from idao.model import ResNetModel, SimpleConv
 
 seed_everything(666)
 
@@ -13,7 +13,8 @@ seed_everything(666)
 # def trainer(mode: ["classification", "regression"], cfg):
 def trainer(mode, cfg):
     # init model
-    model = SimpleConv(mode=mode)
+    #model = SimpleConv(mode=mode)
+    model = ResNetModel(mode=mode)
     if mode == "classification":
         epochs = cfg["TRAINING"]["ClassificationEpochs"]
     else:
@@ -22,12 +23,14 @@ def trainer(mode, cfg):
     # Require at least 1 GPU for training.
     trainer = pl.Trainer(
         gpus=int(cfg["TRAINING"]["NumGPUs"]),
+        tpus=int(cfg["TRAINING"]["NumTPUs"]),
         max_epochs=int(epochs),
         progress_bar_refresh_rate=20,
         weights_save_path=path.Path(cfg["TRAINING"]["ModelParamsSavePath"]).joinpath(
             mode
         ),
         default_root_dir=path.Path(cfg["TRAINING"]["ModelParamsSavePath"]),
+        weights_summary='full'
     )
 
     # Train the model ⚡
@@ -44,6 +47,7 @@ if __name__ == "__main__":
 
     PATH = path.Path(config["DATA"]["DatasetPath"])
 
+    # see data_module.py
     dataset_dm = IDAODataModule(
         data_dir=PATH, batch_size=int(config["TRAINING"]["BatchSize"]), cfg=config
     )

@@ -7,6 +7,7 @@ from torchvision.datasets import DatasetFolder
 from torch.utils.data import Dataset
 
 
+# training data-set
 class IDAODataset(DatasetFolder):
 
     def name_to_energy(self, name):
@@ -26,11 +27,12 @@ class IDAODataset(DatasetFolder):
         sample = self.loader(path)
         if self.transform is not None:
             sample = self.transform(sample)
-        if self.target_transform is not None:
+        if self.target_transform is not None: #TODO: augmentation
             target = self.target_transform(target)
 
         return sample, target, self.name_to_energy(path), self.name_to_index(path)
 
+# Public-test and private-test
 class InferenceDataset(Dataset):
     def __init__(self, main_dir, transform, loader=None):
         self.img_loaderj= img_loader

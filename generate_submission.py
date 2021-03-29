@@ -79,4 +79,8 @@ if __name__ == "__main__":
             logging.StreamHandler(sys.stdout),
         ],
     )
+<<<<<<< Updated upstream
     #main(cfg=config)
+=======
+    main(cfg=config)
+>>>>>>> Stashed changes

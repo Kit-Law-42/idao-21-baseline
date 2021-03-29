@@ -3,4 +3,10 @@ analysis_notebook/.vscode/settings.json
 analysis_notebook/__pycache__/config.cpython-38.pyc
 *.pyc
 config.ini
+<<<<<<< Updated upstream
 checkpoints/lightning_logs
+=======
+checkpoints
+analysis_notebook/data/MNIST/raw/train-images-idx3-ubyte.gz
+analysis_notebook/test1.ipynb
+>>>>>>> Stashed changes

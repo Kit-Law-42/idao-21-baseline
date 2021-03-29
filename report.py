@@ -14,6 +14,7 @@ from more_itertools import bucket
 
 from idao.data_module import IDAODataModule
 from idao.model import SimpleConv
+from idao.model import ResNetModel
 from idao.utils import delong_roc_variance
 
 
@@ -24,7 +25,8 @@ def test_variance(target, predictions):
 def run_test(mode, dataloader, checkpoint_path, cfg):
     torch.multiprocessing.set_sharing_strategy("file_system")
     logging.info("Loading checkpoint")
-    model = SimpleConv.load_from_checkpoint(checkpoint_path, mode=mode)
+    #model = SimpleConv.load_from_checkpoint(checkpoint_path, mode=mode)
+    model = ResNetModel.load_from_checkpoint(checkpoint_path, mode=mode)
     model = model.cpu().eval()
     regression_predictions = []
     classification_predictions = []
@@ -155,8 +157,10 @@ def main(cfg):
     for mode in ["regression", "classification"]:
         if mode == "classification":
             model_path = cfg["REPORT"]["ClassificationCheckpoint"]
+            logging.info(f'Classification model path = {model_path}')
         else:
             model_path = cfg["REPORT"]["RegressionCheckpoint"]
+            logging.info(f'Regression model path = {model_path}')
 
         _mae, _auc = run_test(mode, dl, model_path, cfg=cfg)
         if _mae is not None:
