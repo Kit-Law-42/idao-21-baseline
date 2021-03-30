@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 import torchvision.transforms.functional as F
+from torchvision.transforms.transforms import RandomHorizontalFlip, RandomRotation, Resize
 
 from .dataloader import IDAODataset, img_loader, InferenceDataset
 
@@ -24,24 +25,19 @@ class IDAODataModule(pl.LightningDataModule):
             root=self.data_dir.joinpath("train"),
             loader=img_loader,
             transform=transforms.Compose(
-<<<<<<< Updated upstream
-                [transforms.ToTensor(), transforms.CenterCrop(120)] # crop image to 120*120
-=======
                 [transforms.ToTensor(), 
-                transforms.CenterCrop(224),
+                transforms.CenterCrop(120),
+                transforms.Resize(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomVerticalFlip(),
                 transforms.Normalize((0.449,), (0.226,)),
-                ] # crop image to 120*120
+                ] # crop image to 120*120 and resize to 224*224.
                 
->>>>>>> Stashed changes
             ),
             target_transform=transforms.Compose(
                 [
                     lambda num: (
-<<<<<<< Updated upstream
-                        torch.tensor([0, 1]) if num == 0 else torch.tensor([1, 0]) # one hot encoding.
-=======
                         torch.tensor([0, 1]) if num == 0 else torch.tensor([1, 0]) # one hot encoding to classfy image class=ER/NR.
->>>>>>> Stashed changes
                     )
                 ]
             ),
@@ -53,7 +49,8 @@ class IDAODataModule(pl.LightningDataModule):
                     loader=img_loader,
                     transform=transforms.Compose(
                         [transforms.ToTensor(), 
-                        transforms.CenterCrop(224),
+                        transforms.CenterCrop(120),
+                        transforms.Resize(224),
                         transforms.Normalize((0.449,), (0.226,)),
                         ]
                         
@@ -64,13 +61,13 @@ class IDAODataModule(pl.LightningDataModule):
                     loader=img_loader,
                     transform=transforms.Compose(
                         [transforms.ToTensor(), 
-                        transforms.CenterCrop(224),
+                        transforms.CenterCrop(120),
+                        transforms.Resize(224),
                          transforms.Normalize((0.449,), (0.226,)),
                          ]
                         
                     ),
                 )
-
 
     def setup(self, stage=None):
         # called on every GPU
@@ -85,7 +82,7 @@ class IDAODataModule(pl.LightningDataModule):
         return DataLoader(self.train, self.batch_size, shuffle=True, num_workers=4, pin_memory=torch.cuda.is_available())
 
     def val_dataloader(self):
-        return DataLoader(self.val, 1, num_workers=4, shuffle=False, pin_memory=torch.cuda.is_available())
+        return DataLoader(self.val, 256, num_workers=4, shuffle=False, pin_memory=torch.cuda.is_available())
     
     def test_dataloader(self):
         return DataLoader(

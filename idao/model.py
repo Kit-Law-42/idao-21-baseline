@@ -3,6 +3,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision.models as models
+import torch.optim
 
 class Print(nn.Module):
     """Debugging only"""
@@ -94,7 +95,7 @@ class SimpleConv(pl.LightningModule): # pl.LightningModule replaces nn.Module in
                 class_pred, class_target.float()
             )
             self.valid_acc(torch.sigmoid(class_pred), class_target)
-            self.log("valid_acc", self.train_acc, on_step=True, on_epoch=False)
+            self.log("valid_acc", self.valid_acc.compute())
             self.log("classification_loss", class_loss)
             return class_loss
 
@@ -158,10 +159,10 @@ class ResNetModel(pl.LightningModule):
         self.mode = mode
         
         # transfer learning if pretrained=True
-        self.feature_extractor = models.resnet18(pretrained=True)
+        self.feature_extractor = models.resnet50(pretrained=True)
         # replace first layer from 3 channels to 1 channel.
         # Source from: https://stackoverflow.com/questions/51995977/how-can-i-use-a-pre-trained-neural-network-with-grayscale-images
-        self.feature_extractor.conv1.weight.data = models.resnet18(pretrained=True).conv1.weight.data.sum(axis=1).reshape(64, 1, 7, 7)
+        self.feature_extractor.conv1.weight.data = models.resnet50(pretrained=True).conv1.weight.data.sum(axis=1).reshape(64, 1, 7, 7)
         # conv1_weight = models.resnet18(pretrained=True).conv1.weight
         # print(conv1_weight.shape)
         # self.feature_extractor.conv1.weight = nn.Parameter(conv1_weight.sum(dim=1, keepdim=True))
@@ -171,15 +172,19 @@ class ResNetModel(pl.LightningModule):
         # freeze params
         for param in self.feature_extractor.parameters():
             param.requires_grad = False
-        
-        n_sizes = 1000
+        for param in self.feature_extractor.layer4.parameters(): # unfreeze layer 4.
+            param.requires_grad = True
+        #n_sizes = 1000
 
-        self.fc2 = nn.Linear(n_sizes, 2)
-        self.fc3 = nn.Linear(n_sizes, 1)
+        #self.fc2 = nn.Linear(n_sizes, 2)
+        #self.fc3 = nn.Linear(n_sizes, 1)
         if self.mode == "classification":
-            self.classification = nn.Sequential(self.feature_extractor, self.fc2)         
+            self.feature_extractor.fc = nn.Sequential(nn.Dropout(0.2),nn.Linear(2048, 256), nn.Linear(256, 2))
+            self.classification =self.feature_extractor
+                 
         else:
-            self.regression = nn.Sequential(self.feature_extractor, self.fc3)
+            self.feature_extractor.fc = nn.Sequential(nn.Dropout(0.2),nn.Linear(2048, 256), nn.Linear(256, 1))
+            self.regression =self.feature_extractor         
 
         self.train_acc = pl.metrics.Accuracy()
         self.valid_acc = pl.metrics.Accuracy()
@@ -203,6 +208,8 @@ class ResNetModel(pl.LightningModule):
         else:
             reg_pred = self.regression(x_target.float())
             #             reg_loss = F.l1_loss(reg_pred, reg_target.float().view(-1, 1))
+            # map regression level to 6 evergy level values.
+            #reg_pred = reg_pred.map(lambda x : ResNetModel._regression_to_level(x))
             reg_loss = F.mse_loss(reg_pred, reg_target.float().view(-1, 1))
 
             #             reg_loss = torch.sum(torch.abs(reg_pred - reg_target.float().view(-1, 1)) / reg_target.float().view(-1, 1))
@@ -215,6 +222,15 @@ class ResNetModel(pl.LightningModule):
             self.log("train_acc_epoch", self.train_acc.compute())
         else:
             pass
+
+    # def _regression_to_level(reg_pred_single_val):
+    #     energyInterval = [2,4.5,8,15,25]
+    #     evergyLv = [1,3,6,10,20,30]
+    #     for idx,i in enumerate(energyInterval):
+    #             if (reg_pred_single_val < i):
+    #                 reg_pred_single_val = evergyLv[idx]
+    #                 return reg_pred_single_val
+    #     return 30
 
     def validation_step(self, batch, batch_idx):
         #batch = sample, target, self.name_to_energy(path), self.name_to_index(path) from IDAODataset.__getitem__
@@ -241,8 +257,23 @@ class ResNetModel(pl.LightningModule):
         
     
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=2e-3)
-        return optimizer
+        params_to_update = []
+        if self.mode == "classification":
+            for name,param in self.classification.named_parameters():
+                if param.requires_grad == True:
+                    params_to_update.append((name,param))
+                    print("Classification parameters: \t",name)
+            optimizer = torch.optim.Adam(params_to_update, lr=2e-2)
+            #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.2)
+            return optimizer#, scheduler
+        else:
+            for name,param in self.regression.named_parameters():
+                if param.requires_grad == True:
+                    params_to_update.append((name,param))
+                    print("Regression parameters: \t",name)
+            optimizer = torch.optim.Adam(params_to_update, lr=2e-2)
+            #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.2)
+            return optimizer#, scheduler
 
     # will be used during inference
     def forward(self, x):

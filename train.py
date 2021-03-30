@@ -23,7 +23,7 @@ def trainer(mode, cfg):
     # Require at least 1 GPU for training.
     trainer = pl.Trainer(
         gpus=int(cfg["TRAINING"]["NumGPUs"]),
-        tpus=int(cfg["TRAINING"]["NumTPUs"]),
+        #tpu_cores=int(cfg["TRAINING"]["NumTPUs"]),
         max_epochs=int(epochs),
         progress_bar_refresh_rate=20,
         weights_save_path=path.Path(cfg["TRAINING"]["ModelParamsSavePath"]).joinpath(
@@ -54,5 +54,5 @@ if __name__ == "__main__":
     dataset_dm.prepare_data()
     dataset_dm.setup()
 
-    for mode in ["classification", "regression"]:
+    for mode in ["regression","classification"]:
         trainer(mode, cfg=config)

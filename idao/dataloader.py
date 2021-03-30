@@ -27,7 +27,7 @@ class IDAODataset(DatasetFolder):
         sample = self.loader(path)
         if self.transform is not None:
             sample = self.transform(sample)
-        if self.target_transform is not None: #TODO: augmentation
+        if self.target_transform is not None:
             target = self.target_transform(target)
 
         return sample, target, self.name_to_energy(path), self.name_to_index(path)

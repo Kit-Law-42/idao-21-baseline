@@ -16,6 +16,7 @@ from more_itertools import bucket
 
 from idao.data_module import IDAODataModule
 from idao.model import SimpleConv
+from idao.model import ResNetModel
 from idao.utils import delong_roc_variance
 
 
@@ -26,8 +27,10 @@ def make_csv(mode, dataloader, checkpoint_path, cfg):
     logging.info("Start make csv")
     torch.multiprocessing.set_sharing_strategy("file_system")
     logging.info("Loading checkpoint")
-    model = SimpleConv.load_from_checkpoint(checkpoint_path, mode=mode)
-    model = model.cpu().eval()
+    #model = SimpleConv.load_from_checkpoint(checkpoint_path, mode=mode)
+    model = ResNetModel.load_from_checkpoint(checkpoint_path, mode=mode)
+    #model = model.cpu().eval()
+    model = model.eval()
 
     if mode == "classification":
         logging.info("Classification model loaded")
@@ -79,8 +82,4 @@ if __name__ == "__main__":
             logging.StreamHandler(sys.stdout),
         ],
     )
-<<<<<<< Updated upstream
-    #main(cfg=config)
-=======
     main(cfg=config)
->>>>>>> Stashed changes
