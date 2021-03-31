@@ -159,10 +159,10 @@ class ResNetModel(pl.LightningModule):
         self.mode = mode
         
         # transfer learning if pretrained=True
-        self.feature_extractor = models.resnet50(pretrained=True)
+        self.feature_extractor = models.resnet18(pretrained=True)
         # replace first layer from 3 channels to 1 channel.
         # Source from: https://stackoverflow.com/questions/51995977/how-can-i-use-a-pre-trained-neural-network-with-grayscale-images
-        self.feature_extractor.conv1.weight.data = models.resnet50(pretrained=True).conv1.weight.data.sum(axis=1).reshape(64, 1, 7, 7)
+        self.feature_extractor.conv1.weight.data = models.resnet18(pretrained=True).conv1.weight.data.sum(axis=1).reshape(64, 1, 7, 7)
         # conv1_weight = models.resnet18(pretrained=True).conv1.weight
         # print(conv1_weight.shape)
         # self.feature_extractor.conv1.weight = nn.Parameter(conv1_weight.sum(dim=1, keepdim=True))
@@ -179,11 +179,19 @@ class ResNetModel(pl.LightningModule):
         #self.fc2 = nn.Linear(n_sizes, 2)
         #self.fc3 = nn.Linear(n_sizes, 1)
         if self.mode == "classification":
-            self.feature_extractor.fc = nn.Sequential(nn.Dropout(0.2),nn.Linear(2048, 256), nn.Linear(256, 2))
+            self.feature_extractor.fc = nn.Sequential(nn.Dropout(0.1),
+                                                    nn.Linear(2048, 256),                                                    
+                                                    #nn.BatchNorm1d(num_features=256), 
+                                                    #nn.ReLU(), 
+                                                    nn.Linear(256, 2))
             self.classification =self.feature_extractor
                  
         else:
-            self.feature_extractor.fc = nn.Sequential(nn.Dropout(0.2),nn.Linear(2048, 256), nn.Linear(256, 1))
+            self.feature_extractor.fc = nn.Sequential(nn.Dropout(0.1),
+                                                    nn.Linear(2048, 256), 
+                                                    #nn.BatchNorm1d(num_features=256), 
+                                                    #nn.ReLU(), 
+                                                    nn.Linear(256, 1))
             self.regression =self.feature_extractor         
 
         self.train_acc = pl.metrics.Accuracy()
@@ -261,19 +269,20 @@ class ResNetModel(pl.LightningModule):
         if self.mode == "classification":
             for name,param in self.classification.named_parameters():
                 if param.requires_grad == True:
-                    params_to_update.append((name,param))
+                    params_to_update.append(param)
                     print("Classification parameters: \t",name)
+
             optimizer = torch.optim.Adam(params_to_update, lr=2e-2)
-            #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.2)
-            return optimizer#, scheduler
+            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.2)
+            return optimizer, scheduler
         else:
             for name,param in self.regression.named_parameters():
                 if param.requires_grad == True:
-                    params_to_update.append((name,param))
+                    params_to_update.append(param)
                     print("Regression parameters: \t",name)
             optimizer = torch.optim.Adam(params_to_update, lr=2e-2)
-            #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.2)
-            return optimizer#, scheduler
+            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.2)
+            return optimizer, scheduler
 
     # will be used during inference
     def forward(self, x):

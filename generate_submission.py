@@ -45,9 +45,19 @@ def make_csv(mode, dataloader, checkpoint_path, cfg):
 
         else:
             output = model(img)["energy"].detach()
-            dict_pred["regression_predictions"].append(output[0][0].item())
+            # add case statement to collapse outputs.
+            output_collapsed = _regression_to_level(output[0][0].item())
+            # return output
+            dict_pred["regression_predictions"].append(output_collapsed)
 
-
+def _regression_to_level(val):
+        energyInterval = [2,4.5,8,15,25]
+        evergyLv = [1,3,6,10,20,30]
+        for idx,i in enumerate(energyInterval):
+                if (val < i):
+                    val = evergyLv[idx]
+                    return val
+        return 30
 def main(cfg):
     PATH = path.Path(cfg["DATA"]["DatasetPath"])
 

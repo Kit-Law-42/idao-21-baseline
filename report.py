@@ -154,7 +154,7 @@ def main(cfg):
     mae = 0
     variance = 0
 
-    for mode in ["regression", "classification"]:
+    for mode in ["regression","classification"]:
         if mode == "classification":
             model_path = cfg["REPORT"]["ClassificationCheckpoint"]
             logging.info(f'Classification model path = {model_path}')

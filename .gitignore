@@ -10,3 +10,4 @@ checkpoints
 analysis_notebook/data/MNIST/raw/train-images-idx3-ubyte.gz
 analysis_notebook/test1.ipynb
 >>>>>>> Stashed changes
+*.zip
